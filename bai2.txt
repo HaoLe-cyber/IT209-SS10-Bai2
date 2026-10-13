@@ -1,0 +1,23 @@
+# Sử dụng base image node:18-alpine theo yêu cầu
+FROM node:18-alpine
+
+# Thiết lập thư mục làm việc trong container
+WORKDIR /app
+
+# Khai báo biến môi trường PORT
+ENV PORT=3000
+
+# Sao chép file định nghĩa phụ thuộc vào trước để tận dụng Docker layer cache
+COPY package*.json ./
+
+# Cài đặt các thư viện phụ thuộc
+RUN npm install
+
+# Sao chép toàn bộ mã nguồn ứng dụng vào container
+COPY . .
+
+# Khai báo port lắng nghe của container
+EXPOSE 3000
+
+# Lệnh khởi chạy ứng dụng (dạng exec form)
+CMD ["node", "server.js"]
